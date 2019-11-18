@@ -34,6 +34,7 @@ func (db database) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		item := req.URL.Query().Get("item")
 		price, ok := db[item]
 		if !ok {
+			// 为什么 `WriteHeader` 和 `Fprintf` 消息要分开写？
 			w.WriteHeader(http.StatusNotFound) // 404
 			fmt.Fprintf(w, "no such item: %q\n", item)
 			return
@@ -42,6 +43,8 @@ func (db database) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	default:
 		w.WriteHeader(http.StatusNotFound) // 404
 		fmt.Fprintf(w, "no such page: %s\n", req.URL)
+		// equivalently
+		// http.Error(w, fmt.Sprintf("no such page: %s\n", req.URL), http.StatusNotFound)
 	}
 }
 

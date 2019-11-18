@@ -3,7 +3,10 @@
 
 package intset
 
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
 func Example_one() {
 	//!+main
@@ -47,4 +50,27 @@ func Example_two() {
 	// {1 9 42 144}
 	// {1 9 42 144}
 	// {[4398046511618 0 65536]}
+}
+
+func Test_InterfacePrinciple(t *testing.T) {
+	// compile error:
+	// cannot call pointer method on IntSet literal
+	// cannot take the address of IntSet literal
+	//
+	//var _ = IntSet{}.String()
+
+	// OK
+	var s IntSet
+	var _ = s.String()
+
+	// interface satisfaction test
+
+	// compile error
+	// cannot use s (type IntSet) as type fmt.Stringer in assignment:
+	// IntSet does not implement fmt.Stringer (String method has pointer receiver)
+	//
+	//var _ fmt.Stringer = s
+
+	// OK
+	var _ fmt.Stringer = &s // OK
 }

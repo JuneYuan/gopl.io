@@ -19,6 +19,8 @@ func main() {
 	db := database{"shoes": 50, "socks": 5}
 	http.HandleFunc("/list", db.list)
 	http.HandleFunc("/price", db.price)
+	// Comment from Go src code:
+	// > The handler is typically nil, in which case the DefaultServeMux is used.
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
