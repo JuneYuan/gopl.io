@@ -40,3 +40,9 @@ func (path Path) Distance() float64 {
 }
 
 //!-path
+
+// type Route *Point
+
+// func (r Route) Distance() float64 {
+// 	return 3.14
+// }
