@@ -19,6 +19,20 @@ type IntSet struct {
 	words []uint64
 }
 
+// Len returns the number of elements in the set
+func (s *IntSet) Len() int {
+	count := 0
+
+	for _, word := range s.words {
+		for word != 0 {
+			count++
+			word &= (word - 1)
+		}
+	}
+
+	return count
+}
+
 // Has reports whether the set contains the non-negative value x.
 func (s *IntSet) Has(x int) bool {
 	word, bit := x/64, uint(x%64)

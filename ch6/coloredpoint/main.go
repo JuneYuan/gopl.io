@@ -84,6 +84,22 @@ func init() {
 	fmt.Println(p.Distance(*q.Point)) // "5"
 	q.Point = p.Point                 // p and q now share the same Point
 	p.ScaleBy(2)
-	fmt.Println(*p.Point, *q.Point) // "{2 2} {2 2}"
+	fmt.Printf("%p %v  %p %v\n", p.Point, *p.Point, q.Point, *q.Point)
+	//fmt.Println(*p.Point, *q.Point) // "{2 2} {2 2}"
+	//!-indirect
+}
+
+func init() {
+	red := color.RGBA{255, 0, 0, 255}
+	blue := color.RGBA{0, 0, 255, 255}
+
+	//!+indirect
+	p := ColoredPoint{Point{1, 1}, red}
+	q := ColoredPoint{Point{5, 4}, blue}
+	fmt.Println(p.Distance(q.Point)) // "5"
+	q.Point = p.Point                 // p and q now DON'T share the same Point
+	p.ScaleBy(2)
+	fmt.Printf("%p %v  %p %v\n", &p.Point, p.Point, &q.Point, q.Point)
+	//fmt.Println(p.Point, q.Point) // "{2 2} {2 2}"
 	//!-indirect
 }

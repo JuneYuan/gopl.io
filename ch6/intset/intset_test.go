@@ -3,7 +3,10 @@
 
 package intset
 
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
 func Example_one() {
 	//!+main
@@ -47,4 +50,55 @@ func Example_two() {
 	// {1 9 42 144}
 	// {1 9 42 144}
 	// {[4398046511618 0 65536]}
+}
+
+func Test_impl(t *testing.T) {
+	x := IntSet{}
+	x.Add(0)
+	x.Add(1)
+	x.Add(2)
+	x.Add(3)
+	fmt.Println(x)
+}
+
+func TestIntSet_Len(t *testing.T) {
+	tests := []struct {
+		name   string
+		caller *IntSet
+		want   int
+	}{
+		{
+			name:   "one element",
+			caller: setFromSlice([]int{1}),
+			want:   1,
+		},
+		{
+			name: "three elements",
+			caller: setFromSlice([]int{1, 2, 3}),
+			want: 3,
+		},
+		{
+			name: "seven elements",
+			caller: setFromSlice([]int{1, 2, 3, 5, 8, 13, 21}),
+			want: 7,
+		},
+		{
+			name: "fifteen elements",
+			caller: setFromSlice([]int{1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 601, 987}),
+			want: 15,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.caller.Len(); got != tt.want {
+				t.Errorf("IntSet.Len() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func setFromSlice(slice []int) *IntSet {
+	x := &IntSet{}
+	for _, e := range slice { x.Add(e) }
+	return x
 }
