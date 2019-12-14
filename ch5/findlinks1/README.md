@@ -23,6 +23,11 @@ Such a interweaved linked list can be converted into a binary tree easily: just 
 
 ![convert interweaved linked list to binary tree](https://i.postimg.cc/15NHHT7G/IMG-2069.jpg)
 
-### Test
+**Test**
 
 Can implement the `dfsVisit()` in pre-order/ in-order/ post-order, and check the returned `links`.
+
+**Notice**
+
+I once thought `visit()` was doing a BFS-like traversal, which however, is not true. The for loop, `for c := n.FirstChild; c != nil; c = c.NextSibling
+{}`, doesn't necessarily make it a BFS traversal. Considering the recursive call inside the loop, that indeed make it a DFS path.

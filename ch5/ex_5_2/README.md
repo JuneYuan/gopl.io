@@ -1,0 +1,1 @@
+Simply resembles [findlinks1 in the book](https://github.com/JuneYuan/gopl.io/blob/master/ch5/findlinks1/main.go) and merely differs in the operation on each traversed node: instead of keeping down all links in `<a href="...">`, this problem maintains the count of each element names.
