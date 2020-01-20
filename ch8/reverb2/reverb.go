@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"strings"
 	"time"
 )
@@ -25,18 +26,33 @@ func echo(c net.Conn, shout string, delay time.Duration) {
 
 //!+
 func handleConn(c net.Conn) {
-	input := bufio.NewScanner(c)
-	for input.Scan() {
-		go echo(c, input.Text(), 1*time.Second)
-	}
 	// NOTE: ignoring potential errors from input.Err()
-	c.Close()
+	defer c.Close()
+
+	ch := make(chan string, 3)
+	input := bufio.NewScanner(c)
+
+	go func() {
+		for input.Scan() {
+			ch <- input.Text()
+		}
+	}()
+
+	for {
+		select {
+		case <- time.After(10 * time.Second):
+			fmt.Println("client idle for 10 seconds. server quit!")
+			os.Exit(-1)
+		case msg := <-ch:
+			go echo(c, msg, 1*time.Second)
+		}
+	}
 }
 
 //!-
 
 func main() {
-	l, err := net.Listen("tcp", "localhost:8000")
+	l, err := net.Listen("tcp", "127.0.0.1:8000")
 	if err != nil {
 		log.Fatal(err)
 	}
